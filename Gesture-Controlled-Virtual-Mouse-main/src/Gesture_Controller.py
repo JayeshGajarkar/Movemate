@@ -1,5 +1,4 @@
 # Imports
-
 import cv2
 import mediapipe as mp
 import pyautogui
@@ -288,14 +287,15 @@ class Controller:
         return dist
     
     def changesystembrightness():
-        """sets system brightness based on 'Controller.pinchlv'."""
-        currentBrightnessLv = sbcontrol.get_brightness(display=0)/100.0
-        currentBrightnessLv += Controller.pinchlv/50.0
+        """Sets system brightness based on 'Controller.pinchlv'."""
+        currentBrightnessLv = sbcontrol.get_brightness(display=0)[0] / 100.0  # Assuming get_brightness returns a list
+        currentBrightnessLv += Controller.pinchlv / 50.0
         if currentBrightnessLv > 1.0:
             currentBrightnessLv = 1.0
         elif currentBrightnessLv < 0.0:
             currentBrightnessLv = 0.0       
-        sbcontrol.fade_brightness(int(100*currentBrightnessLv) , start = sbcontrol.get_brightness(display=0))
+        sbcontrol.fade_brightness(int(100 * currentBrightnessLv), start=sbcontrol.get_brightness(display=0)[0])
+
     
     def changesystemvolume():
         """sets system volume based on 'Controller.pinchlv'."""
@@ -591,12 +591,12 @@ class GestureController:
                     Controller.prev_hand = None
                 cv2.imshow('Gesture Controller', image)
                 
-                if (cv2.waitKey(1) == ord('q')):
+                if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
         
         GestureController.cap.release()
         cv2.destroyAllWindows()
 
 # uncomment to run directly
-#gc1 = GestureController()
-#gc1.start()
+gc1 = GestureController()
+gc1.start()
